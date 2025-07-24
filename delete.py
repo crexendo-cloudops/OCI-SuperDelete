@@ -284,6 +284,7 @@ if confirm == "yes":
         DeleteAny(config, signer, processCompartments, "cloud_guard.CloudGuardClient", "managed_list")
 
         print_header("Deleting Email Service at " + CurrentTimeString() + "@ " + region, 1)
+        # TODO: delete DKIMs
         DeleteAny(config, signer, processCompartments, "email.EmailClient", "sender", ObjectNameVar="email_address")
         if processRootCompartment:
             DeleteAny(config, signer, processRootCompartment, "email.EmailClient", "suppression", ObjectNameVar="email_address", DelState="", DelingSate="")
@@ -423,6 +424,9 @@ if confirm == "yes":
         DeleteAny(config, signer, processCompartments, "file_storage.FileStorageClient", "file_system", PerAD=True)
 
         print_header("Deleting VCNs at " + CurrentTimeString() + "@ " + region, 1)
+        # TODO: delete VTAPs
+        # TODO: delete VNICs
+        # TODO: delete Load Balancers
         DeleteVCN(config, signer, processCompartments)
         DeleteAny(config, signer, processCompartments, "core.VirtualNetworkClient", "local_peering_gateway", DelState="TERMINATED", DelingSate="TERMINATING")
         DeleteAny(config, signer, processCompartments, "core.VirtualNetworkClient", "remote_peering_connection", DelState="TERMINATED", DelingSate="TERMINATING")
