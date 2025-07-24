@@ -487,5 +487,22 @@ if confirm == "yes":
     else:
         print("Skipping deletion of the compartments as specified at " + CurrentTimeString() + "@ " + region, 1)
 
+    if homeregion not in regions:
+        print_header("Cleaning up home region at " + CurrentTimeString() + "@ " + homeregion, 1)
+        print_header("Deleting Edge Services at " + CurrentTimeString() + "@ " + homeregion, 1)
+        DeleteAny(config, signer, processCompartments, "waas.WaasClient", "waas_policy")
+        DeleteAny(config, signer, processCompartments, "healthchecks.HealthChecksClient", "http_monitor", ServiceID="monitor_id", DelState="", DelingSate="")
+        DeleteAny(config, signer, processCompartments, "healthchecks.HealthChecksClient", "ping_monitor", ServiceID="monitor_id", DelState="", DelingSate="")
+        DeleteAny(config, signer, processCompartments, "dns.DnsClient", "steering_policy_attachment")
+        DeleteAny(config, signer, processCompartments, "dns.DnsClient", "steering_policy")
+        DeleteAny(config, signer, processCompartments, "dns.DnsClient", "zone", ObjectNameVar="name", ServiceID="zone_name_or_id", Extra=", scope=\"PRIVATE\"", Filter="protected")
+        DeleteAny(config, signer, processCompartments, "dns.DnsClient", "view", Extra=", scope=\"PRIVATE\"", Filter="protected")
+        print_header("Deleting Policies at " + CurrentTimeString() + "@ " + homeregion, 1)
+        DeleteAny(config, signer, processCompartments, "identity.IdentityClient", "policy", ObjectNameVar="name")
+        DeleteAny(config, signer, processCompartments, "identity.IdentityClient", "dynamic_group", ObjectNameVar="name")
+        print_header("Deleting Tag Namespaces at " + CurrentTimeString() + "@ " + homeregion, 1)
+        DeleteTagDefaults(config, signer, processCompartments)
+        DeleteTagNameSpaces(config, signer, processCompartments)
+
 else:
     print("ok, doing nothing")
